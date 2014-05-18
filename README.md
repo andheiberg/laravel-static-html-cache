@@ -24,6 +24,26 @@ RewriteCond %{DOCUMENT_ROOT}/cache/html/%{TIME_DAY}/%{TIME_HOUR}/%{HTTP_HOST}/$1
 RewriteRule ^(.*) /cache/html/%{TIME_DAY}/%{TIME_HOUR}/%{HTTP_HOST}/$1/index.html [L]
 ```
 
+or for Ngix (output from http://www.anilcetin.com/convert-apache-htaccess-to-nginx/)
+
+```
+if ($request_method ~ "GET") {
+	set $rule_0 1$rule_0;
+}
+if ($args !~ ".*=.*") {
+	set $rule_0 2$rule_0;
+}
+if ($http_cookie !~ "^.*(cartalyst_sentry).*$") {
+	set $rule_0 3$rule_0;
+}
+if (-f $document_root/cache/html/%{TIME_DAY}/%{TIME_HOUR}/$http_host/$1/index.html) {
+	set $rule_0 4$rule_0;
+}
+if ($rule_0 = "4321") {
+	rewrite ^/(.*) /cache/html/%{TIME_DAY}/%{TIME_HOUR}/$http_host/$1/index.html last;
+}
+```
+
 ### Add the filter
 
 Add this to your app/filters.php
